@@ -19,7 +19,7 @@ export const buildRequiredString = (tasks: Task[]) => {
     if (required.length === 0) return;
 
     replyString += `${statusEmoji} ${task.name} [${task.type}]` + (task.deadline ? ` - выложить до: ${task.deadline.toLocaleDateString()}\n` : '\n');
-    replyString += required.join();
+    replyString += required.join('');
     replyString += `🔗 Карточка: ${task.notionUrl}\n\n`;
   })
   return replyString;

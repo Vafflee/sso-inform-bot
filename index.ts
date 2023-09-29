@@ -16,11 +16,13 @@ const vk = new VK({
 vk.updates.on('message', replaceMentions);
 
 vk.updates.on('message_new', async (ctx) => {
+  const command = ctx.text?.toLowerCase();
+  if (!command) return;
   try {
-    if (ctx.text === 'помощь') await handleHelp(ctx)
-    if (ctx.text === 'требуются') await handleRequired(ctx)
-    if (ctx.text === 'активные') await handleActiveTasks(ctx)
-    if (ctx.text === 'все') await handleTasks(ctx)
+    if (command === 'помощь') await handleHelp(ctx)
+    if (command === 'требуются') await handleRequired(ctx)
+    if (command === 'активные') await handleActiveTasks(ctx)
+    if (command === 'все') await handleTasks(ctx)
   } catch (error) {
     await ctx.reply(ERROR_MESSAGE)
     console.error(error);
