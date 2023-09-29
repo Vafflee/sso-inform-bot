@@ -1,20 +1,28 @@
-import { Task, TaskStatus, TaskType } from "../notion/types";
+import { requiredMap } from "../constants/requiredMap";
+import { Task } from "../notion/types";
+import { getStatusEmojiByStatus } from "./getStatusEmojiByStatus";
 
 export const buildRequiredString = (tasks: Task[]) => {
 
   let replyString = '';
   tasks.forEach(task => {
     
-    const statusEmoji = 
-      task.status === TaskStatus.TODO ? '⚪' 
-      : task.status === TaskStatus.IN_PROGRESS ? '🔵' :
-      task.status === TaskStatus.PLANNED ? '🟡' : '🟢';
+    const statusEmoji = getStatusEmojiByStatus(task.status)
+
+    const required = task.required.filter(workType => {
+      const role = requiredMap[workType].role;
+      return task.assignees[role].length === 0
+    }).map(workType => {
+      return requiredMap[workType].text;
+    })
+
+    if (required.length === 0) return;
 
     replyString += `${statusEmoji} ${task.name} [${task.type}]` + (task.deadline ? ` - выложить до: ${task.deadline.toLocaleDateString()}\n` : '\n');
-    if (!task.assignments.writer[0]) replyString += `├─  🖋️ Требуется текст\n`;
-    if (!task.assignments.designer[0] && task.type !== TaskType.REPORT) replyString += `├─  🎨 Требуется афиша\n`;
-    if (task.assignments.photographer.length === 0 && task.type !== TaskType.ANNOUNCEMENT) replyString += `├─  📸 Требуется фотограф\n`;
+    replyString += required.join();
     replyString += `🔗 Карточка: ${task.notionUrl}\n\n`;
   })
   return replyString;
 }
+
+

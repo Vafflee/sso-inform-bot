@@ -1,4 +1,4 @@
-import { TASKS_DB_ID } from "../../constants/notions"
+import { TASKS_DB_ID } from "../../constants/notion"
 import { TaskProperties } from "./types"
 import { notion } from "../client"
 import { TaskStatus, TaskType } from "../types"

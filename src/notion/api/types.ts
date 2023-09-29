@@ -1,3 +1,5 @@
+import { RequiredType } from "../types";
+
 export type TaskProperties = {
   "Фото":              PersonSelect;
   "Дедлайн":           DateSelect;
@@ -11,6 +13,14 @@ export type TaskProperties = {
   "Следующий пост":    RelationSelect;
   "Дизайн":            PersonSelect;
   "Name":              Name;
+  "Требуется":         RequiredSelect;
+  "Монтаж":            PersonSelect;
+}
+
+export type RequiredSelect = {
+  id:     string;
+  type:   string;
+  multi_select: MultiSelect<RequiredType>;
 }
 
 export type Name = {
@@ -94,3 +104,9 @@ export type Select = {
   name:  string;
   color: string;
 }
+
+export type MultiSelect<T = string> = Array<{
+  id: string,
+  name: T,
+  color: string
+}>

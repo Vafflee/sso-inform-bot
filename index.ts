@@ -1,8 +1,10 @@
-import { VK } from 'vk-io';
+import { ContextDefaultState, MessageContext, VK } from 'vk-io';
 import { handleTasks } from './src/handlers/handleTasks';
 import { handleRequired } from './src/handlers/handleRequired';
 import { replaceMentions } from './src/middlewares/replaceMentions';
 import { ERROR_MESSAGE } from './src/constants/messages';
+import { handleActiveTasks } from './src/handlers/handleActiveTasks';
+import { handleHelp } from './src/handlers/handleHelp';
 
 if (!process.env.BOT_TOKEN) throw new Error('No bot token!');
 
@@ -15,7 +17,9 @@ vk.updates.on('message', replaceMentions);
 
 vk.updates.on('message_new', async (ctx) => {
   try {
-    if (ctx.text === 'текущие') await handleRequired(ctx)
+    if (ctx.text === 'помощь') await handleHelp(ctx)
+    if (ctx.text === 'требуются') await handleRequired(ctx)
+    if (ctx.text === 'активные') await handleActiveTasks(ctx)
     if (ctx.text === 'все') await handleTasks(ctx)
   } catch (error) {
     await ctx.reply(ERROR_MESSAGE)
